@@ -1,2 +1,2 @@
-java -jar SVGExodus-${project.version}.jar --startMinimized --startObserving
+java -jar ${release.filename}.jar --startMinimized --startObserving
 pause

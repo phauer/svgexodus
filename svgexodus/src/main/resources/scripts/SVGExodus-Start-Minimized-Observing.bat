@@ -1,2 +1,2 @@
 @echo off
-start javaw -jar SVGExodus-${project.version}.jar --startMinimized --startObserving
+start javaw -jar ${release.filename}.jar --startMinimized --startObserving

@@ -1,2 +1,2 @@
-java -jar SVGExodus-${project.version}.jar
+java -jar ${release.filename}.jar
 pause
