@@ -1,6 +1,5 @@
 package de.philipphauer.svgexodus.io.ser;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -38,11 +37,6 @@ public class StandardObjectSerializer extends AbstractOptionsSerializer {
 	@Override
 	public Options loadOptions() throws OptionsSerializerException {
 		logger.info("load Options from " + getTargetFile());
-		File file = new File(getTargetFile());
-		if (!file.exists()) {
-			throw new OptionsSerializerException("Options file not found at " + file);
-		}
-
 		try (ObjectInputStream oout = new ObjectInputStream(new FileInputStream(getTargetFile()))) {
 			Options op = (Options) oout.readObject();
 			return op;

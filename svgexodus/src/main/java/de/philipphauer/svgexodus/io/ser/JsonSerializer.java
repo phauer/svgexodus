@@ -47,11 +47,8 @@ public class JsonSerializer extends AbstractOptionsSerializer {
 
 	@Override
 	public Options loadOptions() throws OptionsSerializerException {
-		Path targetFile = Paths.get(getTargetFile());
-		if (!Files.exists(targetFile)) {
-			throw new OptionsSerializerException("Options file not found at " + targetFile);
-		}
 		try {
+			Path targetFile = Paths.get(getTargetFile());
 			String json = Joiner.on("").join(Files.readAllLines(targetFile, CHARSET));
 			Options opt = (Options) JsonReader.jsonToJava(json);
 			logger.info("successfully loaded options from " + getTargetFile());
