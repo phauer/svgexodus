@@ -56,10 +56,10 @@ public final class IOUtil {
 		return pathList;
 	}
 
-	public static List<Path> getAllSubDirectorys(Path pBaseDir) {
+	public static List<Path> getAllSubDirectorys(Path baseDir) {
 		final List<Path> pathList = new ArrayList<>();
 		try {
-			Files.walkFileTree(pBaseDir, new FileVisitorAdapter<Path>() {
+			Files.walkFileTree(baseDir, new FileVisitorAdapter<Path>() {
 				@Override
 				public FileVisitResult preVisitDirectory(Path pDir, BasicFileAttributes pAttrs) throws IOException {
 					pathList.add(pDir);
@@ -85,20 +85,20 @@ public final class IOUtil {
 	 * letzte Event auf den selben Path mehr als -THRESHOLD_OBSERVING_TIME_ELAPSED_FOR_VALID_EVENT- Sekunden her ist.
 	 * --> Schwellwert
 	 */
-	public static boolean isEventValid(Path pPath) {
+	public static boolean isEventValid(Path path) {
 		Date timeOfCurrentEvent = new Date();
-		Date timeofLastEvent = cMap.get(pPath);
+		Date timeofLastEvent = cMap.get(path);
 		boolean isThresholdExceeded = (timeOfCurrentEvent.getTime() - timeofLastEvent.getTime()) > THRESHOLD_OBSERVING_TIME_ELAPSED_FOR_VALID_EVENT;
 		if (timeofLastEvent == null || isThresholdExceeded) {
-			cMap.put(pPath, timeOfCurrentEvent);
+			cMap.put(path, timeOfCurrentEvent);
 			return true;
 		}
 		return false;
 	}
 
-	public static String detectCharset(Path pSvgFile) throws IOException {
+	public static String detectCharset(Path svgFile) throws IOException {
 		byte[] buf = new byte[4096];
-		try (FileInputStream fis = new FileInputStream(pSvgFile.toFile())) {
+		try (FileInputStream fis = new FileInputStream(svgFile.toFile())) {
 			UniversalDetector detector = new UniversalDetector(null);
 
 			int nread;

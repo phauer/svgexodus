@@ -32,8 +32,8 @@ public class JsonSerializer extends AbstractOptionsSerializer {
 	}
 
 	@Override
-	public void saveOptions(Options pOptions) throws IOException {
-		String json = JsonWriter.objectToJson(pOptions);
+	public void saveOptions(Options options) throws IOException {
+		String json = JsonWriter.objectToJson(options);
 		Path targetFile = Paths.get(getTargetFile());
 		if (!Files.exists(targetFile)) {
 			Files.createFile(targetFile);

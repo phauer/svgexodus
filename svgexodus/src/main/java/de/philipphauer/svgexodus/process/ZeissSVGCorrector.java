@@ -48,22 +48,19 @@ public class ZeissSVGCorrector {
 	}
 
 	/**
-	 * F�hrt eine spezielle Korrektur von fehlerhaften SVG-Dateien durch. Diese Fehler sind: - Adding namespace
+	 * Führt eine spezielle Korrektur von fehlerhaften SVG-Dateien durch. Diese Fehler sind: - Adding namespace
 	 * declaration for svg and xlink if missing. - Removing non-standard style property 'text-anchor: left'. Erstellt
-	 * einen neue korrigierte SVG-Datei mit dem Namen "*-corrected.svg" und gibt diese zur�ck Hintergrund: bestimmte
-	 * Zeiss-Produkte (f Augen�rzte) liefernt arg fehlerhafte svg-Dateien zur�ck. Hier werden sie korrigiert.
-	 * 
-	 * @param pSvgFile
-	 * @throws IOException
+	 * einen neue korrigierte SVG-Datei mit dem Namen "*-corrected.svg" und gibt diese zurück Hintergrund: bestimmte
+	 * Zeiss-Produkte (f Augenärzte) liefernt arg fehlerhafte svg-Dateien zurück. Hier werden sie korrigiert.
 	 */
-	private Path executeCorrection(Path pSvgFile) throws IOException {
-		String encoding = IOUtil.detectCharset(pSvgFile);
+	private Path executeCorrection(Path svgFile) throws IOException {
+		String encoding = IOUtil.detectCharset(svgFile);
 		logger.info("detected encoding:" + encoding);// WINDOWS-1252 --> Cp1252
 		encoding = correctEncodingIfNecessary(encoding);
 		logger.info("used encoding:" + encoding);
 
 		// File hat auch n komisches encoding. notepad++ sagt: "UCS-2 LE w/o BOM"... ... UnicodeLittleUnmarked funzt
-		List<String> readAllLines = Files.readAllLines(pSvgFile, Charset.forName(encoding));
+		List<String> readAllLines = Files.readAllLines(svgFile, Charset.forName(encoding));
 		// encoding siehe http://docs.oracle.com/javase/6/docs/technotes/guides/intl/encoding.doc.html
 		// or http://stackoverflow.com/questions/879482/how-do-i-encode-decode-utf-16le-byte-arrays-with-a-bom
 
@@ -93,7 +90,7 @@ public class ZeissSVGCorrector {
 		svgText = svgText.replace("text-anchor:left", "");
 
 		// neues file erstellen
-		File newFile = new File(pSvgFile.toString().replaceAll(".svg$", FeatureSwitch.CORRECTION_FILE_POSTFIX + ".svg"));
+		File newFile = new File(svgFile.toString().replaceAll(".svg$", FeatureSwitch.CORRECTION_FILE_POSTFIX + ".svg"));
 		IOUtils.write(svgText, new FileOutputStream(newFile), encoding);
 		return Paths.get(newFile.toString());
 	}

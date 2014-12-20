@@ -10,8 +10,8 @@ public class DestinationTypeUtil {
     /**
      * convertiert String (mime-type) in Destinationtype
      */
-    public static DestinationType getDestinationType(String pDestinationType) {
-        switch (pDestinationType) {
+    public static DestinationType getDestinationType(String destinationType) {
+        switch (destinationType) {
             case DestinationType.JPEG_STR:
                 return DestinationType.JPEG;
             case DestinationType.PDF_STR:
@@ -21,7 +21,7 @@ public class DestinationTypeUtil {
             case DestinationType.TIFF_STR:
                 return DestinationType.TIFF;
             default:
-                throw new IllegalArgumentException("Invalid string for pDestinationType: " + pDestinationType);
+                throw new IllegalArgumentException("Invalid string for pDestinationType: " + destinationType);
         }
     }
 

@@ -26,10 +26,10 @@ public class StandardObjectSerializer extends AbstractOptionsSerializer {
     }
 
     @Override
-    public void saveOptions(Options pOptions) throws IOException {
-        logger.info("saveOptions... " + pOptions);
+    public void saveOptions(Options options) throws IOException {
+        logger.info("saveOptions... " + options);
         try (ObjectOutputStream oout = new ObjectOutputStream(new FileOutputStream(getTargetFile()))) {
-            oout.writeObject(pOptions);
+            oout.writeObject(options);
             logger.info("successfully saved options to " + getTargetFile());
         }
     }

@@ -82,7 +82,6 @@ public class ErrorOutputTracker {
 	}
 
 	public static interface TrackedRunnable {
-
 		void run() throws SVGConverterException;
 	}
 

@@ -38,7 +38,7 @@ import de.philipphauer.svgexodus.tasks.ObserveTask;
 
 public class MainPresenter {
 
-	// TODO move to Java8 (lambdas)
+	// TODO move to Java8 (lambdas; IOUtil: use java.time)
 
 	private static final Logger logger = LoggerFactory.getLogger(MainPresenter.class);
 
