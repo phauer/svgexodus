@@ -16,7 +16,7 @@
    </includes>
   </fileSet>
   <fileSet>
-   <directory>${project.build.directory}/classes/scripts/</directory>
+   <directory>${project.build.directory}</directory>
    <outputDirectory>/${release.filename}/</outputDirectory>
    <includes>
     <include>*.bat</include>
