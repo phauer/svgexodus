@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 import org.apache.batik.apps.rasterizer.DestinationType;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 import com.jgoodies.binding.beans.Model;
 
@@ -178,7 +179,7 @@ public class Options extends Model implements Serializable {
 
 	@Override
 	public String toString() {
-		return Objects.toStringHelper(this)
+		return MoreObjects.toStringHelper(this)
 				.addValue(inputPath)
 				.addValue(outputFolder)
 				.addValue(automaticallyOpenResults)

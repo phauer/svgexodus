@@ -38,6 +38,8 @@ import de.philipphauer.svgexodus.tasks.ObserveTask;
 
 public class MainPresenter {
 
+	// TODO move to Java8 (lambdas)
+
 	private static final Logger logger = LoggerFactory.getLogger(MainPresenter.class);
 
 	@Inject
