@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.IOException;
 
 import javax.inject.Inject;
 import javax.swing.JFileChooser;
@@ -30,6 +29,7 @@ import de.philipphauer.svgexodus.gui.event.StopEvent;
 import de.philipphauer.svgexodus.gui.event.UserCancelEvent;
 import de.philipphauer.svgexodus.io.SVGFileFilter;
 import de.philipphauer.svgexodus.io.ser.OptionsSerializer;
+import de.philipphauer.svgexodus.io.ser.OptionsSerializerException;
 import de.philipphauer.svgexodus.model.FeatureSwitch;
 import de.philipphauer.svgexodus.model.Options;
 import de.philipphauer.svgexodus.tasks.ConsoleTask;
@@ -136,7 +136,7 @@ public class MainPresenter {
 				eventBus.post(new ApplicationClosingEvent());
 				try {
 					optionsSerializer.saveOptions(options);
-				} catch (IOException e) {
+				} catch (OptionsSerializerException e) {
 					logger.warn("exception occured during saving of the option file", e);
 				}
 			}

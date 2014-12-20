@@ -14,6 +14,7 @@ import com.google.inject.Singleton;
 import de.philipphauer.svgexodus.cli.CLIOptions;
 import de.philipphauer.svgexodus.io.ser.JsonSerializer;
 import de.philipphauer.svgexodus.io.ser.OptionsSerializer;
+import de.philipphauer.svgexodus.io.ser.OptionsSerializerException;
 import de.philipphauer.svgexodus.model.FeatureSwitch;
 import de.philipphauer.svgexodus.model.Options;
 
@@ -46,7 +47,7 @@ public class GuiceModule extends AbstractModule {
 			logger.info("loadOptions...");
 			options = serializer.loadOptions();
 			logger.info("successfully loaded options.");
-		} catch (Exception e) {
+		} catch (OptionsSerializerException e) {
 			options = createDefaultOptions();
 			logger.info("Couldn't load Options. Using default options. ", e);
 		}

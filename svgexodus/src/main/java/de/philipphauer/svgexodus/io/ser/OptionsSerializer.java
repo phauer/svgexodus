@@ -1,13 +1,11 @@
 package de.philipphauer.svgexodus.io.ser;
 
-import java.io.IOException;
-
 import de.philipphauer.svgexodus.model.Options;
 
 public interface OptionsSerializer {
 
-	void saveOptions(Options options) throws IOException;
+	void saveOptions(Options options) throws OptionsSerializerException;
 
-	Options loadOptions() throws Exception;
+	Options loadOptions() throws OptionsSerializerException;
 
 }

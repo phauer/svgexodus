@@ -2,7 +2,6 @@ package de.philipphauer.svgexodus.io.ser;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -15,41 +14,46 @@ import de.philipphauer.svgexodus.model.Options;
 
 public class StandardObjectSerializer extends AbstractOptionsSerializer {
 
-    private static final Logger logger = LoggerFactory.getLogger(StandardObjectSerializer.class);
+	private static final Logger logger = LoggerFactory.getLogger(StandardObjectSerializer.class);
 
-    public StandardObjectSerializer() {
-        super();
-    }
+	public StandardObjectSerializer() {
+		super();
+	}
 
-    StandardObjectSerializer(String targetFile) {
-        super(targetFile);
-    }
+	StandardObjectSerializer(String targetFile) {
+		super(targetFile);
+	}
 
-    @Override
-    public void saveOptions(Options options) throws IOException {
-        logger.info("saveOptions... " + options);
-        try (ObjectOutputStream oout = new ObjectOutputStream(new FileOutputStream(getTargetFile()))) {
-            oout.writeObject(options);
-            logger.info("successfully saved options to " + getTargetFile());
-        }
-    }
+	@Override
+	public void saveOptions(Options options) throws OptionsSerializerException {
+		logger.info("saveOptions... " + options);
+		try (ObjectOutputStream oout = new ObjectOutputStream(new FileOutputStream(getTargetFile()))) {
+			oout.writeObject(options);
+			logger.info("successfully saved options to " + getTargetFile());
+		} catch (IOException e) {
+			throw new OptionsSerializerException("Error while writing object to file", e);
+		}
+	}
 
-    @Override
-    public Options loadOptions() throws FileNotFoundException, IOException, ClassNotFoundException {
-        logger.info("load Options from " + getTargetFile());
-        File file = new File(getTargetFile());
-        if (!file.exists()) {
-            throw new FileNotFoundException("Options file not found at " + file);
-        }
-        try (ObjectInputStream oout = new ObjectInputStream(new FileInputStream(getTargetFile()))) {
-            Options op = (Options)oout.readObject();
-            return op;
-        }
-    }
+	@Override
+	public Options loadOptions() throws OptionsSerializerException {
+		logger.info("load Options from " + getTargetFile());
+		File file = new File(getTargetFile());
+		if (!file.exists()) {
+			throw new OptionsSerializerException("Options file not found at " + file);
+		}
 
-    @Override
-    protected String getExtension() {
-        return ".ser";
-    }
+		try (ObjectInputStream oout = new ObjectInputStream(new FileInputStream(getTargetFile()))) {
+			Options op = (Options) oout.readObject();
+			return op;
+		} catch (IOException | ClassNotFoundException e) {
+			throw new OptionsSerializerException("Error while reading objects from file", e);
+		}
+	}
+
+	@Override
+	protected String getExtension() {
+		return ".ser";
+	}
 
 }
