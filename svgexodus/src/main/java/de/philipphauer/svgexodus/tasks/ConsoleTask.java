@@ -10,7 +10,6 @@ import javax.swing.JTextArea;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
 import de.philipphauer.svgexodus.gui.GuiConst;
@@ -35,11 +34,10 @@ public class ConsoleTask extends StoppableTask {
 
 	private JProgressBar pgbProgress;
 
-	public ConsoleTask(JTextArea txaConsole, JProgressBar pPgbProgress, EventBus eventBus) {
+	public ConsoleTask(JTextArea txaConsole, JProgressBar pPgbProgress) {
 		this.txaConsole = txaConsole;
 		this.pgbProgress = pPgbProgress;
 		messageQueue = new LinkedBlockingQueue<String>();
-		eventBus.register(this);
 	}
 
 	@Subscribe
@@ -80,28 +78,15 @@ public class ConsoleTask extends StoppableTask {
 		stop();
 	}
 
-	/**
-	 * Nachricht wird auf Console ausgegeben.
-	 * 
-	 * @param message
-	 */
 	public void writeToConsole(String message) {
 		writeToConsole(message, false);
 	}
 
-	/**
-	 * Setzt Progressbar zurück
-	 */
 	public void resetProgressBar(int pMaxium) {
 		pgbProgress.setValue(0);
 		pgbProgress.setMaximum(pMaxium);
 	}
 
-	/**
-	 * Nachricht wird auf Console ausgegeben.
-	 * 
-	 * @param pMessage
-	 */
 	public void writeToConsole(String pMessage, boolean pInkrementProgressbar) {
 		logger.info(pMessage);
 		try {
@@ -120,11 +105,6 @@ public class ConsoleTask extends StoppableTask {
 		JOptionPane.showMessageDialog(null, message + e.getMessage());
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Runnable#run()
-	 */
 	@Override
 	public void run() {
 		while (!isStopSignal()) {

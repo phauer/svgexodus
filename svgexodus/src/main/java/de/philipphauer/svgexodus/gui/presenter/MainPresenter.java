@@ -38,10 +38,6 @@ import de.philipphauer.svgexodus.tasks.ObserveTask;
 
 public class MainPresenter {
 
-	// TODO 1) migrate to Git & Github
-	// TODO 2) remove svgexodus from svn/google code
-	// TODO 3) update old eclipse workspace (leads to removal of svgexodus)
-
 	private static final Logger logger = LoggerFactory.getLogger(MainPresenter.class);
 
 	@Inject
@@ -77,7 +73,8 @@ public class MainPresenter {
 
 		eventBus.register(this);
 
-		startConsoleTask(mainFrame.getConsoleTextArea(), mainFrame.getProgressBar(), eventBus);
+		ConsoleTask consoleTask = startConsoleTask(mainFrame.getConsoleTextArea(), mainFrame.getProgressBar());
+		eventBus.register(consoleTask);
 
 		initEventHandlingForMainFrame();
 
@@ -186,9 +183,10 @@ public class MainPresenter {
 		}
 	}
 
-	private void startConsoleTask(final JTextArea txaConsole, final JProgressBar pgbProgress, EventBus eventBus) {
-		final ConsoleTask consoleTask = new ConsoleTask(txaConsole, pgbProgress, eventBus);
+	private ConsoleTask startConsoleTask(final JTextArea txaConsole, final JProgressBar pgbProgress) {
+		final ConsoleTask consoleTask = new ConsoleTask(txaConsole, pgbProgress);
 		new Thread(consoleTask).start();
+		return consoleTask;
 	}
 
 	@Subscribe

@@ -61,12 +61,7 @@ public class ObserveTask extends StoppableTask {
 			FileSystemManager manager = VFS.getManager();
 			FileObject path = manager.resolveFile(options.getInputPath().toString());
 
-			DefaultFileMonitor fileMonitor = new DefaultFileMonitor(new ConvertingFileListener());
-			fileMonitor.setRecursive(true);
-			fileMonitor.setDelay(1000);
-			fileMonitor.addFile(path);
-			fileMonitor.start();
-
+			DefaultFileMonitor fileMonitor = createFileMonitor(path);
 			while (true) {
 				Thread.sleep(1000);
 				if (isStopSignal()) {
@@ -80,6 +75,15 @@ public class ObserveTask extends StoppableTask {
 			JOptionPane.showMessageDialog(null, message + e.getMessage());
 			logger.error(message, e);
 		}
+	}
+
+	private DefaultFileMonitor createFileMonitor(FileObject path) {
+		DefaultFileMonitor fileMonitor = new DefaultFileMonitor(new ConvertingFileListener());
+		fileMonitor.setRecursive(true);
+		fileMonitor.setDelay(1000);
+		fileMonitor.addFile(path);
+		fileMonitor.start();
+		return fileMonitor;
 	}
 
 	public class ConvertingFileListener implements FileListener {
