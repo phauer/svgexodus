@@ -20,7 +20,6 @@ import com.google.common.eventbus.EventBus;
 import de.philipphauer.svgexodus.gui.event.ConsoleLogEvent;
 import de.philipphauer.svgexodus.io.ErrorOutputTracker;
 import de.philipphauer.svgexodus.io.ErrorOutputTracker.ErrorOutputPrintedExeception;
-import de.philipphauer.svgexodus.io.ErrorOutputTracker.TrackedRunnable;
 import de.philipphauer.svgexodus.model.Options;
 
 /**
@@ -71,10 +70,6 @@ public class Converter {
 		svgConverter.setWidth(weight);// applies for all destinatoinTypes
 		svgConverter.setQuality(jpgQuality);// interval: (0,1)
 
-		ErrorOutputTracker.executeWithOutputTracking(new TrackedRunnable() {
-			public void run() throws SVGConverterException {
-				svgConverter.execute();
-			}
-		});
+		ErrorOutputTracker.executeWithOutputTracking(() -> svgConverter.execute());
 	}
 }

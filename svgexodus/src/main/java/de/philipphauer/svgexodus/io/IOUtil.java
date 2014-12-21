@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,8 +40,7 @@ public final class IOUtil {
 	public static List<Path> getAllSVGFiles(Path path) {
 		final List<Path> pathList = new ArrayList<>();
 		try {
-			Files.walkFileTree(path, new FileVisitorAdapter<Path>() {
-				@Override
+			Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
 				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
 					if (attrs.isRegularFile() && file.toString().endsWith(".svg")) {
 						pathList.add(file);
@@ -59,8 +59,7 @@ public final class IOUtil {
 	public static List<Path> getAllSubDirectorys(Path baseDir) {
 		final List<Path> pathList = new ArrayList<>();
 		try {
-			Files.walkFileTree(baseDir, new FileVisitorAdapter<Path>() {
-				@Override
+			Files.walkFileTree(baseDir, new SimpleFileVisitor<Path>() {
 				public FileVisitResult preVisitDirectory(Path pDir, BasicFileAttributes pAttrs) throws IOException {
 					pathList.add(pDir);
 					return FileVisitResult.CONTINUE;
