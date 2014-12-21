@@ -28,15 +28,15 @@ public class ConsoleTask extends StoppableTask {
 
 	private static final Logger logger = LoggerFactory.getLogger(ConsoleTask.class);
 
-	private JTextArea txaConsole;
+	private JTextArea consoleTextArea;
 
 	private final BlockingQueue<String> messageQueue;
 
-	private JProgressBar pgbProgress;
+	private JProgressBar progressBar;
 
-	public ConsoleTask(JTextArea txaConsole, JProgressBar pPgbProgress) {
-		this.txaConsole = txaConsole;
-		this.pgbProgress = pPgbProgress;
+	public ConsoleTask(JTextArea consoleTextArea, JProgressBar progressBar) {
+		this.consoleTextArea = consoleTextArea;
+		this.progressBar = progressBar;
 		messageQueue = new LinkedBlockingQueue<String>();
 	}
 
@@ -83,8 +83,8 @@ public class ConsoleTask extends StoppableTask {
 	}
 
 	public void resetProgressBar(int pMaxium) {
-		pgbProgress.setValue(0);
-		pgbProgress.setMaximum(pMaxium);
+		progressBar.setValue(0);
+		progressBar.setMaximum(pMaxium);
 	}
 
 	public void writeToConsole(String pMessage, boolean pInkrementProgressbar) {
@@ -92,7 +92,7 @@ public class ConsoleTask extends StoppableTask {
 		try {
 			messageQueue.put(pMessage);
 			if (pInkrementProgressbar) {
-				pgbProgress.setValue(pgbProgress.getValue() + 1);
+				progressBar.setValue(progressBar.getValue() + 1);
 			}
 		} catch (InterruptedException e) {
 			handleError(e);
@@ -110,8 +110,8 @@ public class ConsoleTask extends StoppableTask {
 		while (!isStopSignal()) {
 			try {
 				String message = messageQueue.take();
-				txaConsole.append(message + GuiConst.LINE_SEPARATOR);
-				txaConsole.setCaretPosition(txaConsole.getDocument().getLength());
+				consoleTextArea.append(message + GuiConst.LINE_SEPARATOR);
+				consoleTextArea.setCaretPosition(consoleTextArea.getDocument().getLength());
 			} catch (InterruptedException e) {
 				handleError(e);
 			}

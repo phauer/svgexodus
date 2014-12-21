@@ -113,8 +113,8 @@ public class MainPresenter {
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File selectedFile = fileChooser.getSelectedFile();
 				/*
-				 * somehow the JFileChooser returns a Win32ShellFolder2 which can't be serialized (and causing a
-				 * StackOverflow on serializing at startup)
+				 * somehow the JFileChooser returns a Win32ShellFolder2 which caused a StackOverflow when trying to
+				 * deserialize it again.
 				 */
 				File selectedFilePure = new File(selectedFile.getAbsolutePath());
 				options.setInputPath(selectedFilePure);
@@ -125,7 +125,6 @@ public class MainPresenter {
 			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			int result = fileChooser.showOpenDialog(null);
 			if (result == JFileChooser.APPROVE_OPTION) {
-				// txfResultPath.setText(fileChooser.getSelectedFile().toString());
 				options.setOutputFolder(fileChooser.getSelectedFile());
 			}
 		});
@@ -193,8 +192,8 @@ public class MainPresenter {
 		}
 	}
 
-	private ConsoleTask startConsoleTask(final JTextArea txaConsole, final JProgressBar pgbProgress) {
-		final ConsoleTask consoleTask = new ConsoleTask(txaConsole, pgbProgress);
+	private ConsoleTask startConsoleTask(final JTextArea consoleTextField, final JProgressBar consoleProgressBar) {
+		final ConsoleTask consoleTask = new ConsoleTask(consoleTextField, consoleProgressBar);
 		new Thread(consoleTask).start();
 		return consoleTask;
 	}
