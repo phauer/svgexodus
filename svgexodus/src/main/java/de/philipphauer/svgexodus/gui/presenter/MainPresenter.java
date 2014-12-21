@@ -1,7 +1,5 @@
 package de.philipphauer.svgexodus.gui.presenter;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -100,39 +98,35 @@ public class MainPresenter {
 	}
 
 	private void initEventHandlingForOptionsSideBar(final OptionsSideBar optionsSideBar) {
-		optionsSideBar.addLockupSourceListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser fileChooser = new JFileChooser(optionsSideBar.getSelectedSourcePath());
-				fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-				fileChooser.setFileFilter(new SVGFileFilter());
-				int result = fileChooser.showOpenDialog(null);
-				if (result == JFileChooser.APPROVE_OPTION) {
-					File selectedFile = fileChooser.getSelectedFile();
-					/*
-					 * somehow the JFileChooser returns a Win32ShellFolder2 which can't be serialized (and causing a
-					 * StackOverflow on serializing at startup)
-					 */
-					File selectedFilePure = new File(selectedFile.getAbsolutePath());
-					options.setInputPath(selectedFilePure);
-				}
+		optionsSideBar.addLockupSourceListener(event -> {
+			JFileChooser fileChooser = new JFileChooser(optionsSideBar.getSelectedSourcePath());
+			fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+			fileChooser.setFileFilter(new SVGFileFilter());
+			int result = fileChooser.showOpenDialog(null);
+			if (result == JFileChooser.APPROVE_OPTION) {
+				File selectedFile = fileChooser.getSelectedFile();
+				/*
+				 * somehow the JFileChooser returns a Win32ShellFolder2 which can't be serialized (and causing a
+				 * StackOverflow on serializing at startup)
+				 */
+				File selectedFilePure = new File(selectedFile.getAbsolutePath());
+				options.setInputPath(selectedFilePure);
 			}
 		});
-		optionsSideBar.addLockupResultListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser fileChooser = new JFileChooser(optionsSideBar.getSelectedResultPath());
-				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				int result = fileChooser.showOpenDialog(null);
-				if (result == JFileChooser.APPROVE_OPTION) {
-					// txfResultPath.setText(fileChooser.getSelectedFile().toString());
-					options.setOutputFolder(fileChooser.getSelectedFile());
-				}
+		optionsSideBar.addLockupResultListener(event -> {
+			JFileChooser fileChooser = new JFileChooser(optionsSideBar.getSelectedResultPath());
+			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			int result = fileChooser.showOpenDialog(null);
+			if (result == JFileChooser.APPROVE_OPTION) {
+				// txfResultPath.setText(fileChooser.getSelectedFile().toString());
+				options.setOutputFolder(fileChooser.getSelectedFile());
 			}
 		});
 	}
 
 	private void initEventHandlingForMainFrame() {
 		mainFrame.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent pE) {
+			public void windowClosing(WindowEvent event) {
 				eventBus.post(new ApplicationClosingEvent());
 				try {
 					optionsSerializer.saveOptions(options);
@@ -141,32 +135,23 @@ public class MainPresenter {
 				}
 			}
 		});
-		mainFrame.addConvertListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				try {
-					checkInput();
-					ConverterTask converterTask = converterTaskProvider.get();
-					new Thread(converterTask).start();
-				} catch (InvalidInputException e) {
-					eventBus.post(new ConsoleLogEvent(e.getMessage()));
-				}
+		mainFrame.addConvertListener(event -> {
+			try {
+				checkInput();
+				ConverterTask converterTask = converterTaskProvider.get();
+				new Thread(converterTask).start();
+			} catch (InvalidInputException e) {
+				eventBus.post(new ConsoleLogEvent(e.getMessage()));
 			}
 		});
-		mainFrame.addObserveListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				try {
-					tryToStartObserving();
-				} catch (InvalidInputException e) {
-					eventBus.post(new ConsoleLogEvent(e.getMessage()));
-				}
-			}
-
-		});
-		mainFrame.addCancelListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				eventBus.post(new UserCancelEvent());
+		mainFrame.addObserveListener(event -> {
+			try {
+				tryToStartObserving();
+			} catch (InvalidInputException e) {
+				eventBus.post(new ConsoleLogEvent(e.getMessage()));
 			}
 		});
+		mainFrame.addCancelListener(event -> eventBus.post(new UserCancelEvent()));
 	}
 
 	private void tryToStartObserving() throws InvalidInputException {

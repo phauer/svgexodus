@@ -37,7 +37,7 @@ public class OptionsSerializerTest {
 	}
 
 	@Test(expected = OptionsSerializerException.class)
-	public void fileNotFound$stdSer() throws Exception {
+	public void fileNotFound$stdSer() {
 		OptionsSerializer serializer = new StandardObjectSerializer("C:/thisPathDoesntExistXXX");
 		serializer.loadOptions();
 	}

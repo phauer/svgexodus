@@ -6,7 +6,7 @@
 	<version>1.4.0</version>
 	<name>SVGExodus</name>
 	<properties>
-		<version.java>1.7</version.java>
+		<version.java>1.8</version.java>
 		<release.filename>${project.name}-${project.version}</release.filename>
 	</properties>
 	<dependencies>

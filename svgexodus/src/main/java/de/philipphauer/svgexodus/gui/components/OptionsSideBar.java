@@ -10,8 +10,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -135,14 +133,12 @@ public class OptionsSideBar extends JPanel {
 		// warum eigentlich so rum (compenten -> bean)? weil ich nur mit dem ersten para einen PropertyAdapter
 		// übergeben kann, dem ich sagen kann,
 		// dass es sich NICHT updaten soll, wenn sich sein Partner �ndert (false-Argument).
-		separateOutputPathCheckBox.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				boolean selected = separateOutputPathCheckBox.isSelected();
-				outputPathTextField.setEnabled(selected);
-				selectOutputButton.setEnabled(selected);
-				if (!selected) {
-					options.setOutputFolder(null);
-				}
+		separateOutputPathCheckBox.addChangeListener(event -> {
+			boolean selected = separateOutputPathCheckBox.isSelected();
+			outputPathTextField.setEnabled(selected);
+			selectOutputButton.setEnabled(selected);
+			if (!selected) {
+				options.setOutputFolder(null);
 			}
 		});
 		applyFeatureSwitch(options, featureSwitch);

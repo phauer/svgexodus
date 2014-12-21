@@ -3,7 +3,6 @@ package de.philipphauer.svgexodus.gui.components;
 import java.awt.AWTException;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -18,7 +17,6 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -69,11 +67,7 @@ public class MainFrame extends JFrame {
 		}
 		trayIcon = new TrayIcon(GuiConst.IMAGE_LOGO, "SVGExodus");
 		trayIcon.setImageAutoSize(true);
-		trayIcon.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				maximizeFromTray();
-			}
-		});
+		trayIcon.addActionListener(event -> maximizeFromTray());
 		addWindowListener(new WindowAdapter() {
 			public void windowIconified(WindowEvent event) {
 				minimizeToTray();
@@ -131,33 +125,19 @@ public class MainFrame extends JFrame {
 	}
 
 	private void buildMenuBar() {
-		final JMenuBar menuBar = new JMenuBar();
-		final JMenu aboutMenu = new JMenu("About");
-		aboutMenu.addMenuListener(new MenuListener() {
-
+		JMenuBar menuBar = new JMenuBar();
+		JMenu aboutMenu = new JMenu("About");
+		aboutMenu.addMenuListener(new MenuListenerAdapter() {
 			public void menuSelected(final MenuEvent arg0) {
 				JOptionPane.showMessageDialog(MainFrame.this, GuiConst.ABOUT_TEXT, "About JavaCode4Web",
 						JOptionPane.INFORMATION_MESSAGE, GuiConst.ICON_LOGO);
 			}
-
-			public void menuDeselected(final MenuEvent arg0) {
-			}
-
-			public void menuCanceled(final MenuEvent arg0) {
-			}
 		});
 		menuBar.add(aboutMenu);
-		final JMenu logMenu = new JMenu("Show Log");
-		logMenu.addMenuListener(new MenuListener() {
-
+		JMenu logMenu = new JMenu("Show Log");
+		logMenu.addMenuListener(new MenuListenerAdapter() {
 			public void menuSelected(final MenuEvent arg0) {
 				IOUtil.openLogFile();
-			}
-
-			public void menuDeselected(final MenuEvent arg0) {
-			}
-
-			public void menuCanceled(final MenuEvent arg0) {
 			}
 		});
 		menuBar.add(logMenu);

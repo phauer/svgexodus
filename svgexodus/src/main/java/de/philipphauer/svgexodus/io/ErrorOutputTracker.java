@@ -81,6 +81,7 @@ public class ErrorOutputTracker {
 		}
 	}
 
+	@FunctionalInterface
 	public static interface TrackedRunnable {
 		void run() throws SVGConverterException;
 	}
