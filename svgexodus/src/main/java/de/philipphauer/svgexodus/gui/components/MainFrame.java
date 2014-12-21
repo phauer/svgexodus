@@ -17,6 +17,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -24,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.philipphauer.svgexodus.gui.GuiConst;
-import de.philipphauer.svgexodus.io.IOUtil;
 
 /**
  * @author Philipp Hauer
@@ -47,6 +47,8 @@ public class MainFrame extends JFrame {
 	private JProgressBar progressBar;
 
 	private TrayIcon trayIcon;
+
+	private JMenu openLogFileMenu;
 
 	public MainFrame() {
 		super("SVGExodus");
@@ -134,13 +136,8 @@ public class MainFrame extends JFrame {
 			}
 		});
 		menuBar.add(aboutMenu);
-		JMenu logMenu = new JMenu("Show Log");
-		logMenu.addMenuListener(new MenuListenerAdapter() {
-			public void menuSelected(final MenuEvent arg0) {
-				IOUtil.openLogFile();
-			}
-		});
-		menuBar.add(logMenu);
+		openLogFileMenu = new JMenu("Show Log");
+		menuBar.add(openLogFileMenu);
 		setJMenuBar(menuBar);
 	}
 
@@ -182,6 +179,10 @@ public class MainFrame extends JFrame {
 
 	public void addCancelListener(ActionListener actionListener) {
 		cancelButton.addActionListener(actionListener);
+	}
+
+	public void addOpenLogFileListener(MenuListener menuListener) {
+		openLogFileMenu.addMenuListener(menuListener);
 	}
 
 }

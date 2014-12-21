@@ -1,6 +1,7 @@
 package de.philipphauer.svgexodus.process;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -12,6 +13,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.commons.io.IOUtils;
+import org.mozilla.universalchardet.UniversalDetector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +22,6 @@ import com.google.common.eventbus.EventBus;
 
 import de.philipphauer.svgexodus.gui.GuiConst;
 import de.philipphauer.svgexodus.gui.event.ConsoleLogEvent;
-import de.philipphauer.svgexodus.io.IOUtil;
 import de.philipphauer.svgexodus.model.FeatureSwitch;
 
 /**
@@ -54,7 +55,7 @@ public class ZeissSVGCorrector {
 	 * Zeiss-Produkte (f Augenärzte) liefernt arg fehlerhafte svg-Dateien zurück. Hier werden sie korrigiert.
 	 */
 	private Path executeCorrection(Path svgFile) throws IOException {
-		String encoding = IOUtil.detectCharset(svgFile);
+		String encoding = detectCharset(svgFile);
 		logger.info("detected encoding:" + encoding);// WINDOWS-1252 --> Cp1252
 		encoding = correctEncodingIfNecessary(encoding);
 		logger.info("used encoding:" + encoding);
@@ -106,4 +107,21 @@ public class ZeissSVGCorrector {
 		return encoding;
 	}
 
+	public String detectCharset(Path svgFile) throws IOException {
+		byte[] buf = new byte[4096];
+		try (FileInputStream fis = new FileInputStream(svgFile.toFile())) {
+			UniversalDetector detector = new UniversalDetector(null);
+
+			int nread;
+			while ((nread = fis.read(buf)) > 0 && !detector.isDone()) {
+				detector.handleData(buf, 0, nread);
+			}
+			detector.dataEnd();
+
+			String encoding = detector.getDetectedCharset();
+
+			detector.reset();
+			return encoding;
+		}
+	}
 }

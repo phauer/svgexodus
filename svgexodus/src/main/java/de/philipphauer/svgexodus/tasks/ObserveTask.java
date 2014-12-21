@@ -24,7 +24,6 @@ import de.philipphauer.svgexodus.gui.event.ConsoleLogEvent;
 import de.philipphauer.svgexodus.gui.event.ObserverStartEvent;
 import de.philipphauer.svgexodus.gui.event.ObserverStopEvent;
 import de.philipphauer.svgexodus.gui.event.UserCancelEvent;
-import de.philipphauer.svgexodus.io.IOUtil;
 import de.philipphauer.svgexodus.model.Options;
 import de.philipphauer.svgexodus.process.Converter;
 
@@ -33,7 +32,7 @@ import de.philipphauer.svgexodus.process.Converter;
  */
 public class ObserveTask extends StoppableTask {
 
-	private static final Logger logger = LoggerFactory.getLogger(IOUtil.class);
+	private static final Logger logger = LoggerFactory.getLogger(ObserveTask.class);
 
 	@Inject
 	private Options options;

@@ -1,14 +1,17 @@
 package de.philipphauer.svgexodus.gui.presenter;
 
+import java.awt.Desktop;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
 
 import javax.inject.Inject;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
+import javax.swing.event.MenuEvent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +22,14 @@ import com.google.inject.Provider;
 
 import de.philipphauer.svgexodus.cli.CLIOptions;
 import de.philipphauer.svgexodus.gui.components.MainFrame;
+import de.philipphauer.svgexodus.gui.components.MenuListenerAdapter;
 import de.philipphauer.svgexodus.gui.components.OptionsSideBar;
 import de.philipphauer.svgexodus.gui.event.ApplicationClosingEvent;
 import de.philipphauer.svgexodus.gui.event.ConsoleLogEvent;
 import de.philipphauer.svgexodus.gui.event.StartEvent;
 import de.philipphauer.svgexodus.gui.event.StopEvent;
 import de.philipphauer.svgexodus.gui.event.UserCancelEvent;
+import de.philipphauer.svgexodus.io.LogFile;
 import de.philipphauer.svgexodus.io.SVGFileFilter;
 import de.philipphauer.svgexodus.io.ser.OptionsSerializer;
 import de.philipphauer.svgexodus.io.ser.OptionsSerializerException;
@@ -35,8 +40,6 @@ import de.philipphauer.svgexodus.tasks.ConverterTask;
 import de.philipphauer.svgexodus.tasks.ObserveTask;
 
 public class MainPresenter {
-
-	// TODO move to Java8 (lambdas; IOUtil: use java.time)
 
 	private static final Logger logger = LoggerFactory.getLogger(MainPresenter.class);
 
@@ -62,6 +65,10 @@ public class MainPresenter {
 
 	@Inject
 	private CLIOptions cliOptions;
+
+	@Inject
+	@LogFile
+	private File logFile;
 
 	public void startApplication() {
 		mainFrame = new MainFrame();
@@ -152,6 +159,22 @@ public class MainPresenter {
 			}
 		});
 		mainFrame.addCancelListener(event -> eventBus.post(new UserCancelEvent()));
+		mainFrame.addOpenLogFileListener(new MenuListenerAdapter() {
+			public void menuSelected(final MenuEvent event) {
+				openLogFile();
+			}
+		});
+	}
+
+	public void openLogFile() {
+		try {
+			Desktop.getDesktop().open(logFile);
+		} catch (IOException e) {
+			String message = "Couln't open log file: " + e.getMessage();
+			JOptionPane.showMessageDialog(null, message);
+			logger.error(message, e);
+		}
+
 	}
 
 	private void tryToStartObserving() throws InvalidInputException {

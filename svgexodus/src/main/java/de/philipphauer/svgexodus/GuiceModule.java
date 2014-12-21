@@ -1,6 +1,9 @@
 package de.philipphauer.svgexodus;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 import org.apache.batik.apps.rasterizer.DestinationType;
 import org.slf4j.Logger;
@@ -12,6 +15,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
 import de.philipphauer.svgexodus.cli.CLIOptions;
+import de.philipphauer.svgexodus.io.LogFile;
 import de.philipphauer.svgexodus.io.ser.JsonSerializer;
 import de.philipphauer.svgexodus.io.ser.OptionsSerializer;
 import de.philipphauer.svgexodus.io.ser.OptionsSerializerException;
@@ -31,6 +35,7 @@ public class GuiceModule extends AbstractModule {
 	protected void configure() {
 		bind(OptionsSerializer.class).to(JsonSerializer.class);
 		bind(CLIOptions.class).toInstance(cliOptions);
+		bind(File.class).annotatedWith(LogFile.class).toInstance(getLogFile());
 	}
 
 	@Provides
@@ -73,4 +78,16 @@ public class GuiceModule extends AbstractModule {
 		return new EventBus("svgExodusEventBus");
 	}
 
+	private File getLogFile() {
+		try {
+			Properties logProps = new Properties();
+			InputStream stream = Main.class.getResourceAsStream("/log4j.properties");
+			logProps.load(stream);
+			String logFilePath = logProps.getProperty("log4j.appender.file.File");
+			logFilePath = logFilePath.replace("${java.io.tmpdir}/", System.getProperty("java.io.tmpdir"));
+			return new File(logFilePath);
+		} catch (IOException e) {
+			throw new RuntimeException("Couldn't load log4j properties in order to get log file's location.", e);
+		}
+	}
 }
