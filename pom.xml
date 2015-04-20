@@ -201,26 +201,6 @@
 							</resources>
 						</configuration>
 					</execution>
-					<execution>
-						<id>copy-final-zip-to-release-folder</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<encoding>UTF-8</encoding>
-							<outputDirectory>${basedir}\..\release\</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${project.build.directory}</directory>
-									<filtering>false</filtering>
-									<includes>
-										<include>${release.filename}.zip</include>
-									</includes>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
 				</executions>
 			</plugin>
 		</plugins>
