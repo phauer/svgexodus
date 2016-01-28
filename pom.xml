@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.philipphauer</groupId>
 	<artifactId>svgexodus</artifactId>
-	<version>1.4.0</version>
+	<version>1.4.1</version>
 	<name>SVGExodus</name>
 	<properties>
 		<version.java>1.8</version.java>

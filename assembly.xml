@@ -20,6 +20,7 @@
    <outputDirectory>/${release.filename}/</outputDirectory>
    <includes>
     <include>*.bat</include>
+	<include>*.sh</include>
    </includes>
   </fileSet>
  </fileSets>
